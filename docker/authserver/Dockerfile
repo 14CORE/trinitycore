@@ -14,7 +14,7 @@ RUN apt-get -qq -o Dpkg::Use-Pty=0 update && \
     libboost-system1.62.0 \
     libboost-thread1.62.0 \
     libboost-regex1.62.0 \
-    libssl1.1 \
+    libssl1.0.2  \
     libmariadbclient18 \
     netcat \
  < /dev/null > /dev/null \
@@ -28,11 +28,7 @@ ENV install_prefix /opt/trinitycore
 WORKDIR "${install_prefix}/bin"
 VOLUME "${install_prefix}/etc"
 
-# Wait for the database server to come up first.
-ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh "${install_prefix}/bin/wait-for-it.sh"
-COPY authserver.sh "${install_prefix}/bin/authserver.sh"
-COPY authserver "${install_prefix}/bin/authserver"
-
+COPY ["wait-for-it.sh", "authserver.sh", "authserver", "${install_prefix}/bin/"]
 RUN chmod +x "${install_prefix}/bin"/*
 
 ENV DEBIAN_FRONTEND newt

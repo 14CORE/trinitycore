@@ -7,18 +7,19 @@ DEFAULT_GM_PASSWORD = trinity
 DEFAULT_GM_ID = 1
 
 # Database hostname and port. Defaulted to Docker swarm container mariadb.
-DB_HOST = mariadb
+DB_HOST = wow-db
 DB_PORT = 3306
-DB_USERNAME = trinity
-DB_PASSWORD = trinity
+DB_USERNAME = trinitydb
+DB_PASSWORD = trinitydb
 DB_WORLD = world
 DB_CHARACTERS = characters
 DB_AUTH = auth
 
 # What realm ID and port should the worldserver identify itself as.
 WORLDSERVER_REALM_ID = 2
+WORLDSERVER_IP = 192.168.0.5
 WORLDSERVER_PORT = 8085
-WORLDSERVER_NAME = "TrinityCore"
+WORLDSERVER_NAME = "WorldServerTrinityCore"
 
 # Enable worldserver remote access and SOAP API by default.
 WORLDSERVER_RA = 1
@@ -47,7 +48,7 @@ SQL_FIX_REALMLIST = $(SQL_ARTIFACTS)/custom/auth/fix_realmlist.sql
 SQL_ADD_GM_USER = $(SQL_ARTIFACTS)/custom/auth/add_gm_user.sql
 
 # TDB database files used by worldserver to initialise the world database.
-SQL_TDB = $(notdir $(wildcard $(SQL_ARTIFACTS)/TDB_*/*.sql))
+SQL_TDB = $(notdir $(wildcard $(SQL_ARTIFACTS)/TDB_*.sql))
 SQL_TDB_WORLDSERVER = $(addprefix docker/worldserver/, $(SQL_TDB))
 
 # Version of TrinityCore we are compiling, packaging and running.
@@ -70,9 +71,9 @@ MPQ_DATA_ARTIFACTS = $(ARTIFACTS)/$(MPQ_DATA_DIR)
 # MPQ game data files use to generate the worldserver map data.
 MPQ = $(addprefix $(GAME_CLIENT)/Data/, $(addsuffix .MPQ, \
 	common expansion patch-3 patch-2 patch common-2 lichking \
-	enUS/lichking-speech-enUS enUS/expansion-speech-enUS enUS/lichking-locale-enUS \
-	enUS/expansion-locale-enUS enUS/base-enUS enUS/patch-enUS-2 enUS/backup-enUS \
-	enUS/speech-enUS enUS/patch-enUS-3 enUS/patch-enUS enUS/locale-enUS ) )
+	enGB/lichking-speech-enGB enGB/expansion-speech-enGB enGB/lichking-locale-enGB \
+	enGB/expansion-locale-enGB enGB/base-enGB enGB/patch-enGB-2 enGB/backup-enGB \
+	enGB/speech-enGB enGB/patch-enGB-3 enGB/patch-enGB enGB/locale-enGB ) )
 
 # TrinityCore binary and config files.
 TOOLS = mapextractor mmaps_generator vmap4assembler vmap4extractor
@@ -209,7 +210,7 @@ $(CONF): $(DIST_CONF)
 # the worldserver Docker container build directory so it can be imported on the
 # first fun.
 $(SQL_TDB_WORLDSERVER):
-	cp -r $(SQL_ARTIFACTS)/TDB_*/"$(notdir $@)" docker/worldserver
+	cp -r $(SQL_ARTIFACTS)/"$(notdir $@)" docker/worldserver
 
 $(SQL_INITDB_ARTIFACTS):
 	mkdir -p "$@"

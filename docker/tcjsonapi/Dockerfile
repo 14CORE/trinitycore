@@ -21,10 +21,10 @@ RUN apt-get -qq -o Dpkg::Use-Pty=0 update && \
  < /dev/null > /dev/null \
  && rm -rf /var/lib/apt/lists/*
 
-ENV DB_HOST mariadb
+ENV DB_HOST wow-db
 ENV DB_PORT 3306
-ENV DB_USERNAME trinity
-ENV DB_PASSWORD trinity
+ENV DB_USERNAME trinitydb
+ENV DB_PASSWORD trinitydb
 ENV DB_AUTH auth
 ENV DB_CHARACTERS characters
 ENV DB_WORLD world
@@ -36,7 +36,7 @@ ENV BIND_PORT 80
 ENV HEALTHCHECK_URL http://localhost:80/public/index.php/gameobject/template/Milk
 
 # Wait for the database server to come up first.
-ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh "/bin/wait-for-it.sh"
+ADD wait-for-it.sh "/bin/wait-for-it.sh"
 RUN chmod +x "/bin/wait-for-it.sh"
 
 # Install TC-JSON-API software according to

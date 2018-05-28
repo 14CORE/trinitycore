@@ -5,14 +5,14 @@
 FROM php:7.1.6-alpine
 LABEL author="Nicola Worthington <nicolaw@tfb.net>"
 
-ENV DB_HOST mariadb
+ENV DB_HOST wow-db
 ENV DB_PORT 3306
 ENV DB_WORLD world
 ENV DB_CHARACTERS characters
 ENV DB_AUTH auth
 ENV DB_DBC dbc
-ENV DB_USERNAME trinity
-ENV DB_PASSWORD trinity
+ENV DB_USERNAME trinitydb
+ENV DB_PASSWORD trinitydb
 
 ENV BIND_IP 0.0.0.0
 ENV BIND_PORT 80
