@@ -9,8 +9,8 @@ DEFAULT_GM_ID = 1
 # Database hostname and port. Defaulted to Docker swarm container mariadb.
 DB_HOST = wow-db
 DB_PORT = 3306
-DB_USERNAME = trinitydb
-DB_PASSWORD = trinitydb
+DB_USERNAME = trinity
+DB_PASSWORD = trinity
 DB_WORLD = world
 DB_CHARACTERS = characters
 DB_AUTH = auth
@@ -90,7 +90,7 @@ MYSQL_ARTIFACTS = $(ARTIFACTS)/$(MYSQL_DIR)
 INSTALL_PREFIX = /opt/trinitycore
 
 
-.PHONY: run build springclean clean help mapdata_deb mapdata_rpm mapdata
+.PHONY: run build springclean superclean clean help mapdata_deb mapdata_rpm mapdata
 .INTERMEDIATE: $(addprefix docker/tools/, $(TOOLS)) $(MPQ)
 .DEFAULT_GOAL := help
 
@@ -143,6 +143,13 @@ springclean:
 		$(SQL_FIX_REALMLIST) $(SQL_ADD_GM_USER) $(SQL_INITDB_ARTIFACTS) \
 		$(addprefix docker/tools/, $(TOOLS))
 
+# Clean most things, except $(ARTIFACTS) which takes a long time to build.
+superclean:
+	@while [ -z "$$CONFIRM_CLEAN" ]; do \
+			read -r -p "Are you sure you want to delete databases and configuration? [y/N]: " CONFIRM_CLEAN; \
+		done; [ "$$CONFIRM_CLEAN" = "y" ]
+	rm -Rf $(DIST_CONF)
+
 # DEB and RPM packaging up of mapdata files for later easier re-installation.
 mapdata_deb: PKG_TYPE=deb
 mapdata_deb: $(MAP_DATA_DEB)
@@ -193,18 +200,18 @@ $(MPQ_DATA_ARTIFACTS):
 # .conf.dist artifacts.
 $(CONF): $(DIST_CONF)
 	sed \
-			-e 's!127.0.0.1;3306;trinity;trinity;auth!$(DB_HOST);$(DB_PORT);$(DB_USERNAME);$(DB_PASSWORD);$(DB_AUTH)!g;' \
-			-e 's!127.0.0.1;3306;trinity;trinity;characters!$(DB_HOST);$(DB_PORT);$(DB_USERNAME);$(DB_PASSWORD);$(DB_CHARACTERS)!g;' \
-			-e 's!127.0.0.1;3306;trinity;trinity;world!$(DB_HOST);$(DB_PORT);$(DB_USERNAME);$(DB_PASSWORD);$(DB_WORLD)!g;' \
-		  -e 's!^RealmID\s*=.*!RealmID = $(WORLDSERVER_REALM_ID)!g;' \
-		  -e 's!^DataDir\s*=.*!DataDir = "$(INSTALL_PREFIX)/$(MAP_DATA_DIR)"!g;' \
-			-e 's!^SourceDirectory\s*=.*!SourceDirectory = "$(INSTALL_PREFIX)"!g;' \
-			-e 's!^BuildDirectory\s*=.*!BuildDirectory = "$(INSTALL_PREFIX)/$(SOURCE_DIR)/TrinityCore/build"!g;' \
-			-e 's!^Ra\.Enable\s*=.*!Ra.Enable = $(WORLDSERVER_RA)!g;' \
-			-e 's!^Ra\.IP\s*=.*!Ra.IP = "$(WORLDSERVER_RA_IP)"!g;' \
-			-e 's!^SOAP\.Enabled\s*=.*!SOAP.Enabled = $(WORLDSERVER_SOAP)!g;' \
-			-e 's!^SOAP\.IP\s*=.*!SOAP.IP = "$(WORLDSERVER_SOAP_IP)"!g;' \
-			< "$@.dist" > "$@"
+		-e 's!127.0.0.1;3306;trinity;trinity;auth!$(DB_HOST);$(DB_PORT);$(DB_USERNAME);$(DB_PASSWORD);$(DB_AUTH)!g;' \
+		-e 's!127.0.0.1;3306;trinity;trinity;characters!$(DB_HOST);$(DB_PORT);$(DB_USERNAME);$(DB_PASSWORD);$(DB_CHARACTERS)!g;' \
+		-e 's!127.0.0.1;3306;trinity;trinity;world!$(DB_HOST);$(DB_PORT);$(DB_USERNAME);$(DB_PASSWORD);$(DB_WORLD)!g;' \
+		-e 's!^RealmID\s*=.*!RealmID = $(WORLDSERVER_REALM_ID)!g;' \
+		-e 's!^DataDir\s*=.*!DataDir = "$(INSTALL_PREFIX)/$(MAP_DATA_DIR)"!g;' \
+		-e 's!^SourceDirectory\s*=.*!SourceDirectory = "$(INSTALL_PREFIX)"!g;' \
+		-e 's!^BuildDirectory\s*=.*!BuildDirectory = "$(INSTALL_PREFIX)/$(SOURCE_DIR)/TrinityCore/build"!g;' \
+		-e 's!^Ra\.Enable\s*=.*!Ra.Enable = $(WORLDSERVER_RA)!g;' \
+		-e 's!^Ra\.IP\s*=.*!Ra.IP = "$(WORLDSERVER_RA_IP)"!g;' \
+		-e 's!^SOAP\.Enabled\s*=.*!SOAP.Enabled = $(WORLDSERVER_SOAP)!g;' \
+		-e 's!^SOAP\.IP\s*=.*!SOAP.IP = "$(WORLDSERVER_SOAP_IP)"!g;' \
+		< "$@.dist" > "$@"
 
 # Copy the TDB TrinityCore inintal full world database SQL import files in to
 # the worldserver Docker container build directory so it can be imported on the
@@ -252,8 +259,9 @@ $(SQL_ADD_GM_USER): $(SQL_ARTIFACTS)/custom
 # address of the worldserver to be something other than just localhost.
 $(SQL_FIX_REALMLIST): $(SQL_ARTIFACTS)/custom
 	printf 'REPLACE INTO realmlist (id,name,address,port) VALUES ("%s","%s","%s","%s");\n' \
-		"$(WORLDSERVER_REALM_ID)" "$(WORLDSERVER_NAME)" \
-		"$(shell hostname -i | egrep -o '[0-9\.]{7,15}')" \
+		"$(WORLDSERVER_REALM_ID)" \
+		"$(WORLDSERVER_NAME)" \
+		"$(WORLDSERVER_IP)" \
 		"$(WORLDSERVER_PORT)"	> "$@"
 
 # Copy binary build artifacts in to Docker container build directories.

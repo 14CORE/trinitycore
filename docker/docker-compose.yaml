@@ -8,8 +8,8 @@ services:
     image: "mariadb:latest"
     environment:
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:-okgreat}"
-      MYSQL_USER: "${DB_USERNAME:-trinitydb}"
-      MYSQL_PASSWORD: "${DB_PASSWORD:-trinitydb}"
+      MYSQL_USER: "${DB_USERNAME:-trinity}"
+      MYSQL_PASSWORD: "${DB_PASSWORD:-trinity}"
       LOCALIP: "${LOCALIP:-192.168.0.5}"
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "${LOCALIP:-192.168.0.5}"]
@@ -64,8 +64,8 @@ services:
     environment:
       DB_HOST: "${DB_HOST:-wow-db}"
       DB_PORT: "${DB_PORT:-3306}"
-      DB_USERNAME: "${DB_USERNAME:-trinitydb}"
-      DB_PASSWORD: "${DB_PASSWORD:-trinitydb}"
+      DB_USERNAME: "${DB_USERNAME:-trinity}"
+      DB_PASSWORD: "${DB_PASSWORD:-trinity}"
       BIND_IP: "0.0.0.0"
       BIND_PORT: "80"
     depends_on:
@@ -97,7 +97,7 @@ services:
 #      DB_HOST: "${DB_HOST:-wow-db}"
 #      DB_USERNAME: "${DB_USERNAME:-trinity}"
 #      DB_PASSWORD: "${DB_USERNAME:-trinity}"
-#      DB_AOWOW: "${DB_AOWOW:-aowow}"
+#      DB_AOWOW: "${DB_AOWOW:-aowowdb}"
 #    volumes:
 #      - ../artifacts/mpqdata:/usr/local/aowow/setup/mpqdata
 #      - ../World_of_Warcraft:/usr/local/World_of_Warcraft:ro
@@ -113,9 +113,8 @@ services:
 #      - db_data:/var/lib/mysql
 #    #restart: always
 #    environment:
-#      MYSQL_ROOT_PASSWORD: aowowrootpass
-#      MYSQL_DATABASE: wordpress
-#      MYSQL_USER: aowow
-#      MYSQL_PASSWORD: aowowpass
+#      MYSQL_ROOT_PASSWORD: aowowdbroot
+#      MYSQL_USER: aowowdb
+#      MYSQL_PASSWORD: aowowdb
 #    ports:
-#      - "8083:3306"
+#      - "8084:3306"

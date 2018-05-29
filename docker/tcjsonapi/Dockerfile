@@ -23,8 +23,8 @@ RUN apt-get -qq -o Dpkg::Use-Pty=0 update && \
 
 ENV DB_HOST wow-db
 ENV DB_PORT 3306
-ENV DB_USERNAME trinitydb
-ENV DB_PASSWORD trinitydb
+ENV DB_USERNAME trinity
+ENV DB_PASSWORD trinity
 ENV DB_AUTH auth
 ENV DB_CHARACTERS characters
 ENV DB_WORLD world
