@@ -5,7 +5,9 @@
 FROM httpd:alpine
 LABEL author="Nicola Worthington <nicolaw@tfb.net>"
 
+ENV TC_JSON_API_PORT 8081
 ENV TC_JSON_API_URL "location.protocol + '//' + location.hostname + ':' + '${TC_JSON_API_PORT}' + '/public/index.php/'"
+ENV HEALTHCHECK_URL http://localhost:80/Keira2/index.html
 
 # Add packages.
 RUN apk add --no-cache git curl
@@ -18,4 +20,6 @@ RUN sed -r -e 's@^(\s*app\.defaultAPI\s*=\s*).+;@\1'"${TC_JSON_API_URL}"';@g;' \
 COPY index.html "/usr/local/apache2/htdocs/index.html"
 COPY htaccess "/usr/local/apache2/htdocs/.htaccess"
 
-RUN echo 'ServerName "${ServerName}"' >> /usr/local/apache2/conf/httpd.conf
+# https://github.com/moby/moby/pull/33249
+HEALTHCHECK --interval=60s --timeout=3s --retries=3 --start-period=30s \
+  CMD curl -sSLIf "${HEALTHCHECK_URL}" || exit 1
