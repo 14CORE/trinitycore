@@ -62,7 +62,7 @@ fi
 
 # Define default SOAP values.
 declare TCSOAPHOST_DEFAULT="localhost"
-declare TCSOAPPORT_DEFAULT="7878"
+declare TCSOAPPORT_DEFAULT="7887"
 declare TCSOAPUSER_DEFAULT="tcadmin"
 declare TCSOAPPASS_DEFAULT="tcadmin"
 

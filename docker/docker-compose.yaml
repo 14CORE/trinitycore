@@ -41,7 +41,7 @@ services:
     healthcheck:
       test: ["CMD", "./tcadmin",
        "--soaphost=192.168.0.8",
-       "--soapport=7878",
+       "--soapport=7887",
        "--soapuser=trinity",
        "--soappass=trinity"]
       interval: "60s"
@@ -54,7 +54,7 @@ services:
     ports:
       - "8085:8085"
       - "3443:3443"
-      - "7878:7878"
+      - "7887:7878"
     volumes:
       - ../artifacts/etc:/opt/trinitycore/etc
       - ../artifacts/mapdata:/opt/trinitycore/mapdata

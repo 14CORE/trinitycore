@@ -27,5 +27,5 @@ ports=3443/tcp
 [TrinityCore WorldServer SOAP]
 title=TrinityCore WorldServer SOAP API
 description=World of Warcraft private server
-ports=7878/tcp
+ports=7887/tcp
 
