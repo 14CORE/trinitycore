@@ -10,9 +10,9 @@ services:
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:-okgreat}"
       MYSQL_USER: "${DB_USERNAME:-trinity}"
       MYSQL_PASSWORD: "${DB_PASSWORD:-trinity}"
-      LOCALIP: "${LOCALIP:-192.168.0.5}"
+      LOCALIP: "${LOCALIP:-192.168.0.8}"
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "${LOCALIP:-192.168.0.5}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "${LOCALIP:-192.168.0.8}"]
       timeout: "20s"
       retries: 10
     ports:
@@ -40,7 +40,7 @@ services:
       DB_PORT: "${DB_PORT:-3306}"
     healthcheck:
       test: ["CMD", "./tcadmin",
-       "--soaphost=192.168.0.5",
+       "--soaphost=192.168.0.8",
        "--soapport=7878",
        "--soapuser=trinity",
        "--soappass=trinity"]
@@ -77,10 +77,10 @@ services:
   keira2:
     build: keira2
     environment:
-      ServerName: "192.168.0.5"
+      ServerName: "192.168.0.8"
       TC_JSON_API_PORT: "8081"
     healthcheck:
-          test: ["CMD", "curl", "-sSLIf http://192.168.0.5:80/Keira2/index.html"]
+          test: ["CMD", "curl", "-sSLIf http://192.168.0.8:80/Keira2/index.html"]
           interval: "60s"
           timeout: "15s"
           retries: 3

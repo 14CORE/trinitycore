@@ -17,7 +17,7 @@ DB_AUTH = auth
 
 # What realm ID and port should the worldserver identify itself as.
 WORLDSERVER_REALM_ID = 2
-WORLDSERVER_IP = 192.168.0.5
+WORLDSERVER_IP = 192.168.0.8
 WORLDSERVER_PORT = 8085
 WORLDSERVER_NAME = "WorldServerTrinityCore"
 

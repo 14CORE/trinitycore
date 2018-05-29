@@ -34,7 +34,7 @@ ENV DB_AOWOW aowow
 ENV BIND_IP 0.0.0.0
 ENV BIND_PORT 80
 
-ENV HEALTHCHECK_URL http://192.168.0.5:80/
+ENV HEALTHCHECK_URL http://192.168.0.8:80/
 
 # Wait for the database server to come up first.
 COPY wait-for-it.sh "/bin/wait-for-it.sh"
